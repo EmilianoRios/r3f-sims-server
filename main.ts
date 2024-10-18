@@ -464,6 +464,13 @@ const findPath = (start: any[], end: any[]) => {
 }
 
 const updateGrid = () => {
+  for (let x = 0; x < map.size[0] * map.gridDivision; x++) {
+    for (let y = 0; y < map.size[0] * map.gridDivision; y++) {
+      grid.setWalkableAt(x, y, true)
+    }
+  }
+
+  if (map.items === null) return
   map.items.forEach((item) => {
     if (item?.walkable || item?.wall) {
       return
@@ -553,6 +560,8 @@ io.on('connection', (socket) => {
     pantsColor: generateRandomHexColor()
   })
 
+  io.emit('characters', characters)
+
   socket.on('move', (from, to) => {
     const character = characters.find((character) => character.id === socket.id)
 
@@ -566,14 +575,26 @@ io.on('connection', (socket) => {
     io.emit('playerMove', character)
   })
 
-  socket.emit('hello', {
+  socket.on('itemsUpdate', (items) => {
+    if (items === null) return
+    map.items = items
+    characters.forEach((character) => {
+      character.path = []
+      character.position = generateRandomPosition()
+    })
+    updateGrid()
+    io.emit('mapUpdate', {
+      map,
+      characters
+    })
+  })
+
+  io.emit('hello', {
     map,
     characters,
     id: socket.id,
     items
   })
-
-  io.emit('characters', characters)
 
   socket.on('disconnect', (reason) => {
     console.log(`socket ${socket.id} disconnected due to ${reason}`)
