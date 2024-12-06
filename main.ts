@@ -24,11 +24,21 @@ interface CharacterProperties {
 
 const characters: CharacterProperties[] = []
 
+interface CharacterPropertiesFP {
+  id: string
+  name: string
+  position: number[]
+}
+
+const charactersFP: CharacterPropertiesFP[] = []
+
 interface Item {
   name: string
   size: [number, number]
+  scale?: number
   wall?: boolean
   walkable?: boolean
+  overlap?: boolean
 }
 
 interface Items {
@@ -40,10 +50,67 @@ interface PositionedItem extends Item {
   rotation?: number
 }
 
+interface Weapon {
+  name: string
+  size: [number, number]
+}
+
+interface Dummy {
+  name: string
+  size: number
+}
+
+interface Weapons {
+  [key: string]: Weapon
+}
+
+interface Dummies {
+  [key: string]: Dummy
+}
+
+interface PositionedWeapon extends Weapon {
+  position: [number, number, number]
+  rotation?: number
+}
+
+interface PositionedDummy extends Dummy {
+  position: [number, number, number]
+  rotation?: number
+  animationDummy?: string
+}
+
 interface Map {
   size: [number, number]
   gridDivision: number
   items: PositionedItem[]
+  weapons: PositionedWeapon[]
+  dummies: PositionedDummy[]
+}
+
+const dummies: Dummies = {
+  man: {
+    name: 'man',
+    size: 0.5
+  }
+}
+
+const weapons: Weapons = {
+  assaultRifle: {
+    name: 'assaultRifle',
+    size: [0.5, 0.5]
+  },
+  revolver: {
+    name: 'revolver',
+    size: [0.5, 0.5]
+  },
+  shotgun: {
+    name: 'shotgun',
+    size: [0.5, 0.5]
+  },
+  kitchenKnife: {
+    name: 'kitchenKnife',
+    size: [0.5, 0.5]
+  }
 }
 
 const items: Items = {
@@ -305,11 +372,74 @@ const items: Items = {
   stoolBarSquare: {
     name: 'stoolBarSquare',
     size: [1, 1]
+  },
+  carSUV: {
+    name: 'carSUV',
+    size: [4, 8]
+  },
+  wall: {
+    name: 'wall',
+    size: [1, 4]
+  },
+  bloodsplat: {
+    name: 'bloodSplat',
+    size: [1, 1]
+  },
+  streetStraight: {
+    name: 'streetStraight',
+    size: [16, 16],
+    wall: true,
+    overlap: true
+  },
+  evidenceMarker1: {
+    name: 'evidenceMarker1',
+    size: [1, 1],
+    wall: true
+  },
+  evidenceMarker2: {
+    name: 'evidenceMarker2',
+    size: [1, 1],
+    wall: true
+  },
+  evidenceMarker3: {
+    name: 'evidenceMarker3',
+    size: [1, 1],
+    wall: true
+  },
+  evidenceMarker4: {
+    name: 'evidenceMarker4',
+    size: [1, 1],
+    wall: true
+  },
+  evidenceMarker5: {
+    name: 'evidenceMarker5',
+    size: [1, 1],
+    wall: true
+  },
+  evidenceMarker6: {
+    name: 'evidenceMarker6',
+    size: [1, 1],
+    wall: true
+  },
+  evidenceMarker7: {
+    name: 'evidenceMarker7',
+    size: [1, 1],
+    wall: true
+  },
+  evidenceMarker8: {
+    name: 'evidenceMarker8',
+    size: [1, 1],
+    wall: true
+  },
+  evidenceMarker9: {
+    name: 'evidenceMarker9',
+    size: [1, 1],
+    wall: true
   }
 }
 
 const map: Map = {
-  size: [10, 10],
+  size: [50, 50],
   gridDivision: 2,
   items: [
     {
@@ -443,6 +573,101 @@ const map: Map = {
     {
       ...items.lampRoundFloor,
       gridPosition: [0, 12]
+    },
+    {
+      ...items.carSUV,
+      gridPosition: [30, 17]
+    },
+    {
+      ...items.carSUV,
+      gridPosition: [33, 9]
+    },
+    {
+      ...items.wall,
+      gridPosition: [0, 21],
+      rotation: 1
+    },
+    {
+      ...items.wall,
+      gridPosition: [4, 21],
+      rotation: 1
+    },
+    {
+      ...items.bloodsplat,
+      gridPosition: [1, 36],
+      scale: 0.15
+    },
+    {
+      ...items.bloodsplat,
+      gridPosition: [3, 36],
+      scale: 0.25
+    },
+    {
+      ...items.bloodsplat,
+      gridPosition: [6, 36],
+      scale: 0.35
+    },
+    {
+      ...items.bloodsplat,
+      gridPosition: [10, 36],
+      scale: 0.45
+    },
+    {
+      ...items.streetStraight,
+      gridPosition: [24, 24]
+    },
+    {
+      ...items.streetStraight,
+      gridPosition: [24, 8]
+    },
+    {
+      ...items.evidenceMarker1,
+      gridPosition: [1, 34]
+    },
+    {
+      ...items.evidenceMarker2,
+      gridPosition: [2, 34]
+    },
+    {
+      ...items.evidenceMarker3,
+      gridPosition: [3, 34]
+    },
+    {
+      ...items.evidenceMarker4,
+      gridPosition: [4, 34]
+    },
+    {
+      ...items.evidenceMarker5,
+      gridPosition: [5, 34]
+    },
+    {
+      ...items.evidenceMarker6,
+      gridPosition: [6, 34]
+    },
+    {
+      ...items.evidenceMarker7,
+      gridPosition: [7, 34]
+    },
+    {
+      ...items.evidenceMarker8,
+      gridPosition: [8, 34]
+    },
+    {
+      ...items.evidenceMarker9,
+      gridPosition: [9, 34]
+    }
+  ],
+  weapons: [
+    { ...weapons.assaultRifle, position: [1, 1, 20] },
+    { ...weapons.revolver, position: [2, 1, 20] },
+    { ...weapons.shotgun, position: [3, 1, 20] },
+    { ...weapons.kitchenKnife, position: [6, 1, 20] }
+  ],
+  dummies: [
+    {
+      ...dummies.man,
+      position: [0, 0, 0],
+      animationDummy: 'HumanArmature|Man_Idle'
     }
   ]
 }
@@ -472,7 +697,7 @@ const updateGrid = () => {
 
   if (map.items === null) return
   map.items.forEach((item) => {
-    if (item?.walkable || item?.wall) {
+    if (item?.walkable || item?.wall || item?.overlap) {
       return
     }
     const width =
@@ -560,7 +785,15 @@ io.on('connection', (socket) => {
     pantsColor: generateRandomHexColor()
   })
 
+  charactersFP.push({
+    id: socket.id,
+    name: generateRandomName(),
+    position: generateRandomPosition()
+  })
+
   io.emit('characters', characters)
+
+  io.emit('charactersFP', charactersFP)
 
   socket.on('move', (from, to) => {
     const character = characters.find((character) => character.id === socket.id)
@@ -575,13 +808,24 @@ io.on('connection', (socket) => {
     io.emit('playerMove', character)
   })
 
+  socket.on('moveFP', (position) => {
+    const characterFP = characters.find(
+      (character) => character.id === socket.id
+    )
+
+    if (!characterFP) return
+    console.log(characterFP)
+    characterFP.position = position
+    io.emit('playerMoveFP', characterFP)
+  })
+
   socket.on('itemsUpdate', (items) => {
     if (items === null) return
     map.items = items
-    characters.forEach((character) => {
+    /* characters.forEach((character) => {
       character.path = []
       character.position = generateRandomPosition()
-    })
+    }) */
     updateGrid()
     io.emit('mapUpdate', {
       map,
@@ -589,11 +833,32 @@ io.on('connection', (socket) => {
     })
   })
 
+  socket.on('weaponsUpdate', (weapons) => {
+    if (weapons === null) return
+    map.weapons = weapons
+    updateGrid()
+    io.emit('mapUpdate', {
+      map
+    })
+  })
+
+  socket.on('dummiesUpdate', (dummies) => {
+    if (dummies === null) return
+    map.dummies = dummies
+    updateGrid()
+    io.emit('mapUpdate', {
+      map
+    })
+  })
+
   io.emit('hello', {
     map,
     characters,
+    charactersFP,
     id: socket.id,
-    items
+    items,
+    weapons,
+    dummies
   })
 
   socket.on('disconnect', (reason) => {
